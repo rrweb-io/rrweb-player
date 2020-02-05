@@ -13,6 +13,9 @@
         ref:handler
         style="left: {percentage}"
       ></div>
+      {#each logs as item,index}
+        <div style="left: {leftErrors[index]}" title="{item.error.message}" class="rr-error-progress"></div>
+	    {/each}
     </div>
     <span class="rr-timeline__time">{formatTime(meta.totalTime)}</span>
   </div>
@@ -99,6 +102,10 @@
         const percent = Math.min(1, currentTime / meta.totalTime);
         return `${100 * percent}%`;
       },
+      leftErrors({ replayer, logs, meta }) {
+        const startTime = replayer.events[0].timestamp;
+        return logs.map(log => `${(log.timestamp - startTime) / meta.totalTime * 100}%`);
+      }
     },
     helpers: {
       formatTime,
@@ -320,5 +327,12 @@
 
   .rr-controller__btns button:disabled {
     cursor: not-allowed;
+  }
+  .rr-error-progress {
+    position: absolute;
+    background-color: red;
+    width: 4px;
+    height: 20px;
+    margin-left: -2px;
   }
 </style>

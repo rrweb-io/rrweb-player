@@ -16,7 +16,7 @@
     "svelte": "^2.16.0"
   },
   "dependencies": {
-    "rrweb": "^0.7.25"
+    "rrweb": "https://github.com/NovoRoll/rrweb"
   },
   "scripts": {
     "build": "rollup -c",
