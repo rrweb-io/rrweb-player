@@ -8,6 +8,7 @@
     {showController}
     {autoPlay}
     {skipInactive}
+    {tags}
     on:fullscreen="fullscreen()"
   />
   {/if}
@@ -40,7 +41,7 @@
         skipInactive: true,
         replayer: null,
         triggerFocus: true,
-        customEvent: false,
+        tags: {},
       };
     },
     computed: {
@@ -92,23 +93,6 @@
       replayer.on('resize', (dimension) =>
         this.updateScale(replayer.wrapper, dimension),
       );
-
-      /**
-       * handle custom-event and dispatch it to the event handler.
-       */
-      replayer.on('custom-event', (event) => {
-        const { customEvent } = this.get();
-
-        /**
-         * distribute `tag` and `payload` to customEvent handler.
-         *
-         * i.e, customEvent: (eventName, data) => {}
-         */
-        if (customEvent !== false) {
-          const {tag, payload} = event.data;
-          customEvent(tag, payload);
-        }
-      });
 
       this.set({
         replayer,
