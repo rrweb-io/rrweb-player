@@ -83,6 +83,7 @@
 {/if}
 
 <script>
+  import { EventType } from 'rrweb';
   import { formatTime } from './utils.js';
 
   export default {
@@ -128,7 +129,7 @@
            * we are only interested in custom event and calculate it's position
            * to place it in player's timeline.
            */
-          if (event.type === 5) {
+          if (event.type === EventType.Custom) {
             const customEvent = {
               name: event.data.tag,
               background: tags[event.data.tag] || 'rgb(73, 80, 246)',
