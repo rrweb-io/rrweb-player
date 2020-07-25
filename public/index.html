@@ -18,8 +18,12 @@
     // eslint-disable-next-line
     const component = new rrwebPlayer({
       target: document.body,
-      props: {
-        name: 'world',
+      data: {
+        events,
+        skipInactive: true,
+        showDebug: false,
+        autoPlay: false,
+        showWarning: false,
       },
     });
     // component.addEventListener('finish', () => console.log('finish'));

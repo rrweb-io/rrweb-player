@@ -8,6 +8,7 @@ import typescript from '@rollup/plugin-typescript';
 import postcss from 'rollup-plugin-postcss';
 import pkg from './package.json';
 
+// eslint-disable-next-line no-undef
 const production = !process.env.ROLLUP_WATCH;
 
 const entries = (production
