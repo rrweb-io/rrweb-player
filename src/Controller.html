@@ -5,20 +5,23 @@
     <div
       class="rr-progress"
       class:disabled="isSkipping"
-      ref:progress on:click="handleProgressClick(event)"
+      ref:progress
+      on:click="handleProgressClick(event)"
     >
       <div class="rr-progress__step" ref:step style="width: {percentage}"></div>
-        {#each getCustomEvents as event,i (i)}
-          <div
-            title="{event.name}"
-            style="width: 10px;height: 5px;position: absolute;top: 2px;transform: translate(-50%, -50%);background: {event.background};left: {event.position};"
-          ></div>
-        {/each}
+      {#each getCustomEvents as event,i (i)}
+      <div
+        title="{event.name}"
+        style="width: 10px;height: 5px;position: absolute;top: 2px;transform: translate(-50%, -50%);background: {event.background};left: {event.position};"
+      ></div>
+      {/each}
 
       <div
         class="rr-progress__handler"
+        class:active="dragging"
         ref:handler
         style="left: {percentage}"
+        on:mousedown="handleDragStart(event)"
       ></div>
     </div>
     <span class="rr-timeline__time">{formatTime(meta.totalTime)}</span>
@@ -64,7 +67,12 @@
       {s}x
     </button>
     {/each}
-    <Switch id="skip" bind:checked="skipInactive" disabled="{isSkipping}" label="skip inactive" />
+    <Switch
+      id="skip"
+      bind:checked="skipInactive"
+      disabled="{isSkipping}"
+      label="skip inactive"
+    />
     <button on:click="fire('fullscreen')">
       <svg
         class="icon"
@@ -72,10 +80,14 @@
         version="1.1"
         xmlns="http://www.w3.org/2000/svg"
         xmlns:xlink="http://www.w3.org/1999/xlink"
-        width="16" height="16"
+        width="16"
+        height="16"
       >
         <defs><style type="text/css"></style></defs>
-        <path d="M916 380c-26.4 0-48-21.6-48-48L868 223.2 613.6 477.6c-18.4 18.4-48.8 18.4-68 0-18.4-18.4-18.4-48.8 0-68L800 156 692 156c-26.4 0-48-21.6-48-48 0-26.4 21.6-48 48-48l224 0c26.4 0 48 21.6 48 48l0 224C964 358.4 942.4 380 916 380zM231.2 860l108.8 0c26.4 0 48 21.6 48 48s-21.6 48-48 48l-224 0c-26.4 0-48-21.6-48-48l0-224c0-26.4 21.6-48 48-48 26.4 0 48 21.6 48 48L164 792l253.6-253.6c18.4-18.4 48.8-18.4 68 0 18.4 18.4 18.4 48.8 0 68L231.2 860z" p-id="1286"></path>
+        <path
+          d="M916 380c-26.4 0-48-21.6-48-48L868 223.2 613.6 477.6c-18.4 18.4-48.8 18.4-68 0-18.4-18.4-18.4-48.8 0-68L800 156 692 156c-26.4 0-48-21.6-48-48 0-26.4 21.6-48 48-48l224 0c26.4 0 48 21.6 48 48l0 224C964 358.4 942.4 380 916 380zM231.2 860l108.8 0c26.4 0 48 21.6 48 48s-21.6 48-48 48l-224 0c-26.4 0-48-21.6-48-48l0-224c0-26.4 21.6-48 48-48 26.4 0 48 21.6 48 48L164 792l253.6-253.6c18.4-18.4 48.8-18.4 68 0 18.4 18.4 18.4 48.8 0 68L231.2 860z"
+          p-id="1286"
+        ></path>
       </svg>
     </button>
   </div>
@@ -85,6 +97,35 @@
 <script>
   import { EventType } from 'rrweb';
   import { formatTime } from './utils.js';
+
+  function throttle(func, wait, options = {}) {
+    let timeout = null;
+    let previous = 0;
+    // tslint:disable-next-line: only-arrow-functions
+    return function (...arg) {
+      const now = Date.now();
+      if (!previous && options.leading === false) {
+        previous = now;
+      }
+      const remaining = wait - (now - previous);
+      const context = this;
+      const args = arg;
+      if (remaining <= 0 || remaining > wait) {
+        if (timeout) {
+          window.clearTimeout(timeout);
+          timeout = null;
+        }
+        previous = now;
+        func.apply(context, args);
+      } else if (!timeout && options.trailing !== false) {
+        timeout = window.setTimeout(() => {
+          previous = options.leading === false ? 0 : Date.now();
+          timeout = null;
+          func.apply(context, args);
+        }, remaining);
+      }
+    };
+  }
 
   export default {
     components: {
@@ -98,6 +139,8 @@
         skipInactive: true,
         speed: 1,
         speedOption: [],
+        dragging: false,
+        lock: false,
       };
     },
     computed: {
@@ -108,7 +151,7 @@
         const percent = Math.min(1, currentTime / meta.totalTime);
         return `${100 * percent}%`;
       },
-      getCustomEvents({tags, replayer}) {
+      getCustomEvents({ tags, replayer }) {
         const { events } = replayer;
         const totalEvents = events.length;
         const start = events[0].timestamp;
@@ -119,12 +162,12 @@
         const position = (startTime, endTime, tagTime) => {
           const sessionDuration = endTime - startTime;
           const eventDuration = endTime - tagTime;
-          const eventPosition = 100 - ((eventDuration / sessionDuration) * 100);
+          const eventPosition = 100 - (eventDuration / sessionDuration) * 100;
 
           return eventPosition.toFixed(2);
         };
 
-         // loop through all the events and find out custom event.
+        // loop through all the events and find out custom event.
         events.forEach((event) => {
           /**
            * we are only interested in custom event and calculate it's position
@@ -217,11 +260,50 @@
         }
         const timeOffset = meta.totalTime * percent;
         this.set({ currentTime: timeOffset });
-        replayer.play(timeOffset);
-        if (!isPlaying) {
-          replayer.pause();
+        replayer.pause();
+        replayer.resume(timeOffset);
+      },
+      handleDragStart(event) {
+        const { replayer } = this.get();
+        this.set({ dragging: true });
+        replayer.pause();
+        window.addEventListener('mousemove', this.handleDragging);
+        window.addEventListener('mouseup', this.handleDragEnd);
+      },
+      handleDragEnd(event) {
+        this.set({ dragging: false });
+        window.removeEventListener('mousemove', this.handleDragging);
+        window.removeEventListener('mouseup', this.handleDragEnd);
+      },
+      handleDragging(event) {
+        const { meta, replayer, isSkipping, lock } = this.get();
+        if (isSkipping) {
+          return;
+        }
+        const progressRect = this.refs.progress.getBoundingClientRect();
+        const x = event.clientX - progressRect.left;
+        let percent = x / progressRect.width;
+        if (percent < 0) {
+          percent = 0;
+        } else if (percent > 1) {
+          percent = 1;
+        }
+        const timeOffset = meta.totalTime * percent;
+        if (lock) {
+          console.log('locked');
+        } else {
+          this.throttledFn(timeOffset);
         }
       },
+    },
+    oncreate() {
+      this.handleDragging = this.handleDragging.bind(this);
+      this.handleDragEnd = this.handleDragEnd.bind(this);
+      this.throttledFn = throttle((timeOffset) => {
+        this.set({ currentTime: timeOffset, lock: true });
+        replayer.resume(timeOffset);
+        replayer.pause();
+      }, 10);
     },
     onupdate({ changed, current, previous }) {
       if (current.replayer && !previous) {
@@ -249,13 +331,16 @@
           this.timer = null;
           this.set({ isPlaying: false, currentTime: 0 });
         });
-        current.replayer.on('skip-start', payload => {
+        current.replayer.on('skip-start', (payload) => {
           payload.isSkipping = true;
           this.set(payload);
         });
-        current.replayer.on('skip-end', payload => {
+        current.replayer.on('skip-end', (payload) => {
           payload.isSkipping = false;
           this.set(payload);
+        });
+        current.replayer.on('flush', () => {
+          this.set({ lock: false });
         });
       }
       if (changed.isPlaying) {
@@ -295,12 +380,14 @@
   }
 
   .rr-timeline__time {
-    padding: 0 20px;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
     color: #11103e;
   }
 
   .rr-progress {
-    width: 100%;
+    flex: 1;
     height: 12px;
     background: #eee;
     position: relative;
@@ -331,6 +418,11 @@
     top: 2px;
     transform: translate(-50%, -50%);
     background: rgb(73, 80, 246);
+  }
+  .rr-progress__handler.active {
+    width: 30px;
+    height: 30px;
+    border-radius: 15px;
   }
 
   .rr-controller__btns {
