@@ -5,7 +5,6 @@ import livereload from 'rollup-plugin-livereload';
 import { terser } from 'rollup-plugin-terser';
 import sveltePreprocess from 'svelte-preprocess';
 import typescript from '@rollup/plugin-typescript';
-import postcss from 'rollup-plugin-postcss';
 import pkg from './package.json';
 
 // eslint-disable-next-line no-undef
@@ -33,7 +32,12 @@ export default entries.map((output) => ({
         css.write('dist/style.css');
         css.write('public/bundle.css');
       },
-      preprocess: sveltePreprocess(),
+      preprocess: sveltePreprocess({
+        postcss: {
+          // eslint-disable-next-line no-undef
+          plugins: [require('postcss-easy-import')],
+        },
+      }),
     }),
 
     // If you have external dependencies installed from
@@ -46,9 +50,8 @@ export default entries.map((output) => ({
       dedupe: ['svelte'],
     }),
     commonjs(),
-    typescript({ sourceMap: !production }),
 
-    postcss(),
+    typescript({ sourceMap: !production }),
 
     // In dev mode, call `npm run start` once
     // the bundle has been generated
@@ -75,6 +78,7 @@ function serve() {
       if (!started) {
         started = true;
 
+        // eslint-disable-next-line @typescript-eslint/no-var-requires, no-undef
         require('child_process').spawn('npm', ['run', 'start', '--', '--dev'], {
           stdio: ['ignore', 'inherit', 'inherit'],
           shell: true,
