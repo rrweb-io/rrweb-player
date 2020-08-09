@@ -24,7 +24,7 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "rrweb": "../rrweb"
+    "rrweb": "^0.9.0"
   },
   "scripts": {
     "build": "rollup -c",

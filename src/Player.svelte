@@ -54,7 +54,7 @@
       `scale(${Math.min(widthScale, heightScale)})` + 'translate(-50%, -50%)';
   };
 
-  export const fullscreen = () => {
+  const fullscreen = () => {
     if (player) {
       isFullscreen() ? exitFullscreen() : openFullscreen(player);
     }
@@ -112,6 +112,8 @@
         setTimeout(() => {
           _width = width;
           _height = height;
+          width = player.offsetWidth;
+          height = player.offsetHeight;
           updateScale(replayer.wrapper, {
             width: replayer.iframe.offsetWidth,
             height: replayer.iframe.offsetHeight,
@@ -170,6 +172,7 @@
       {autoPlay}
       {speedOption}
       {skipInactive}
-      {tags} />
+      {tags}
+      on:fullscreen={() => fullscreen()} />
   {/if}
 </div>

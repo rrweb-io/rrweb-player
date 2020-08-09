@@ -1227,8 +1227,10 @@ rrweb-snapshot@^0.8.0:
   resolved "https://registry.npmjs.org/rrweb-snapshot/-/rrweb-snapshot-0.8.0.tgz#43f119407cb7ec0fdbb30056d6149b1a2c76b79b"
   integrity sha512-rPQmgragMixTOGQNtMDI31XzpbtaXt2aIB98LNqkeOjaCeo46+B1rxAMLsT3FDFFgmq8vo/cS101H6wiiyuwew==
 
-rrweb@../rrweb:
-  version "0.8.5"
+rrweb@^0.9.0:
+  version "0.9.0"
+  resolved "https://registry.yarnpkg.com/rrweb/-/rrweb-0.9.0.tgz#94e5370b931fcbad61280845a540f39a3e8eb13a"
+  integrity sha512-sfLu1Wu7rE85mZu0kSvdVoM3VwDNo1SPqnz7wl96sIC0RchcthxifhMLrldmI9/btdGCi8jJrpcEnuW09vpdWw==
   dependencies:
     "@types/smoothscroll-polyfill" "^0.3.0"
     "@xstate/fsm" "^1.4.0"
