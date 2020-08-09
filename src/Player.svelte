@@ -12,8 +12,6 @@
   } from './utils';
   import Controller from './Controller.svelte';
 
-  // console.log(r);
-
   export let width: number = 1024;
   export let height: number = 576;
   export let events: eventWithTime[] = [];
