@@ -1228,7 +1228,7 @@ rollup@^1.20.0:
 
 "rrweb@git://github.com/rrweb-io/rrweb.git#iframe":
   version "0.9.9"
-  resolved "git://github.com/rrweb-io/rrweb.git#3a385c855a53066a3e32aae9d9fe786522505e4c"
+  resolved "git://github.com/rrweb-io/rrweb.git#29cffa193825ff73c1d8a9e2bf6e1aa2b3297b9b"
   dependencies:
     "@types/css-font-loading-module" "0.0.4"
     "@xstate/fsm" "^1.4.0"
