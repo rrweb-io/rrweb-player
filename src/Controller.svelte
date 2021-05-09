@@ -295,31 +295,6 @@
     font-size: 13px;
   }
 
-  .rr-controller__btns button {
-    width: 32px;
-    height: 32px;
-    display: flex;
-    padding: 0;
-    align-items: center;
-    justify-content: center;
-    background: none;
-    border: none;
-    border-radius: 50%;
-    cursor: pointer;
-  }
-
-  .rr-controller__btns button:active {
-    background: #e0e1fe;
-  }
-
-  .rr-controller__btns button.active {
-    color: #fff;
-    background: rgb(73, 80, 246);
-  }
-
-  .rr-controller__btns button:disabled {
-    cursor: not-allowed;
-  }
 </style>
 
 {#if showController}
@@ -348,49 +323,16 @@
       <span class="rr-timeline__time">{formatTime(meta.totalTime)}</span>
     </div>
     <div class="rr-controller__btns">
-      <button on:click={toggle}>
+      <button class="btn btn-md btn-primary" on:click={toggle}>
         {#if playerState === 'playing'}
-          <svg
-            class="icon"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="16"
-            height="16">
-            <path
-              d="M682.65984 128q53.00224 0 90.50112 37.49888t37.49888 90.50112l0
-              512q0 53.00224-37.49888 90.50112t-90.50112
-              37.49888-90.50112-37.49888-37.49888-90.50112l0-512q0-53.00224
-              37.49888-90.50112t90.50112-37.49888zM341.34016 128q53.00224 0
-              90.50112 37.49888t37.49888 90.50112l0 512q0 53.00224-37.49888
-              90.50112t-90.50112
-              37.49888-90.50112-37.49888-37.49888-90.50112l0-512q0-53.00224
-              37.49888-90.50112t90.50112-37.49888zM341.34016 213.34016q-17.67424
-              0-30.16704 12.4928t-12.4928 30.16704l0 512q0 17.67424 12.4928
-              30.16704t30.16704 12.4928 30.16704-12.4928
-              12.4928-30.16704l0-512q0-17.67424-12.4928-30.16704t-30.16704-12.4928zM682.65984
-              213.34016q-17.67424 0-30.16704 12.4928t-12.4928 30.16704l0 512q0
-              17.67424 12.4928 30.16704t30.16704 12.4928 30.16704-12.4928
-              12.4928-30.16704l0-512q0-17.67424-12.4928-30.16704t-30.16704-12.4928z" />
-          </svg>
+          <i class="fa fa-pause"></i>
         {:else}
-          <svg
-            class="icon"
-            viewBox="0 0 1024 1024"
-            version="1.1"
-            xmlns="http://www.w3.org/2000/svg"
-            xmlns:xlink="http://www.w3.org/1999/xlink"
-            width="16"
-            height="16">
-            <path
-              d="M170.65984 896l0-768 640 384zM644.66944
-              512l-388.66944-233.32864 0 466.65728z" />
-          </svg>
+          <i class="fa fa-play"></i>
         {/if}
       </button>
       {#each speedOption as s}
         <button
+          class="btn btn-md btn-primary"
           class:active={s === speed && speedState !== 'skipping'}
           on:click={() => setSpeed(s)}
           disabled={speedState === 'skipping'}>
@@ -402,30 +344,8 @@
         bind:checked={skipInactive}
         disabled={speedState === 'skipping'}
         label="skip inactive" />
-      <button on:click={() => dispatch('fullscreen')}>
-        <svg
-          class="icon"
-          viewBox="0 0 1024 1024"
-          version="1.1"
-          xmlns="http://www.w3.org/2000/svg"
-          xmlns:xlink="http://www.w3.org/1999/xlink"
-          width="16"
-          height="16">
-          <defs>
-            <style type="text/css">
-
-            </style>
-          </defs>
-          <path
-            d="M916 380c-26.4 0-48-21.6-48-48L868 223.2 613.6 477.6c-18.4
-            18.4-48.8 18.4-68 0-18.4-18.4-18.4-48.8 0-68L800 156 692 156c-26.4
-            0-48-21.6-48-48 0-26.4 21.6-48 48-48l224 0c26.4 0 48 21.6 48 48l0
-            224C964 358.4 942.4 380 916 380zM231.2 860l108.8 0c26.4 0 48 21.6 48
-            48s-21.6 48-48 48l-224 0c-26.4 0-48-21.6-48-48l0-224c0-26.4 21.6-48
-            48-48 26.4 0 48 21.6 48 48L164 792l253.6-253.6c18.4-18.4 48.8-18.4
-            68 0 18.4 18.4 18.4 48.8 0 68L231.2 860z"
-            p-id="1286" />
-        </svg>
+      <button class="btn btn-md btn-primary" on:click={() => dispatch('fullscreen')}>
+        <i class="fa fa-expand"></i>
       </button>
     </div>
   </div>
