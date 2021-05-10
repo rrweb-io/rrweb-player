@@ -229,74 +229,6 @@
   });
 </script>
 
-<style>
-  .rr-controller {
-    width: 100%;
-    height: 80px;
-    background: #fff;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-around;
-    align-items: center;
-    border-radius: 0 0 5px 5px;
-  }
-
-  .rr-timeline {
-    width: 80%;
-    display: flex;
-    align-items: center;
-  }
-
-  .rr-timeline__time {
-    display: inline-block;
-    width: 100px;
-    text-align: center;
-    color: #11103e;
-  }
-
-  .rr-progress {
-    flex: 1;
-    height: 12px;
-    background: #eee;
-    position: relative;
-    border-radius: 3px;
-    cursor: pointer;
-    box-sizing: border-box;
-    border-top: solid 4px #fff;
-    border-bottom: solid 4px #fff;
-  }
-
-  .rr-progress.disabled {
-    cursor: not-allowed;
-  }
-
-  .rr-progress__step {
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
-    background: #e0e1fe;
-  }
-
-  .rr-progress__handler {
-    width: 20px;
-    height: 20px;
-    border-radius: 10px;
-    position: absolute;
-    top: 2px;
-    transform: translate(-50%, -50%);
-    background: rgb(73, 80, 246);
-  }
-
-  .rr-controller__btns {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 13px;
-  }
-
-</style>
-
 {#if showController}
   <div class="rr-controller">
     <div class="rr-timeline">
@@ -322,7 +254,10 @@
       </div>
       <span class="rr-timeline__time">{formatTime(meta.totalTime)}</span>
     </div>
-    <div class="rr-controller__btns">
+  </div>
+
+  <div class="align-player-controls">
+    <div class="player-btn-groups btn-group" role="group">
       <button class="btn btn-md btn-primary" on:click={toggle}>
         {#if playerState === 'playing'}
           <i class="fa fa-pause"></i>
@@ -339,14 +274,14 @@
           {s}x
         </button>
       {/each}
+      <button class="btn btn-md btn-primary btn-fullscreen" on:click={() => dispatch('fullscreen')}>
+        <i class="fa fa-expand"></i>
+      </button>
       <Switch
         id="skip"
         bind:checked={skipInactive}
         disabled={speedState === 'skipping'}
-        label="skip inactive" />
-      <button class="btn btn-md btn-primary" on:click={() => dispatch('fullscreen')}>
-        <i class="fa fa-expand"></i>
-      </button>
+        label="Skip Inactive" />
     </div>
   </div>
 {/if}

@@ -24,7 +24,7 @@
 
   export const getMirror = () => mirror;
 
-  const controllerHeight = 80;
+  const controllerHeight = 160;
   let player: HTMLElement;
   let frame: HTMLElement;
   let replayer: Replayer;
