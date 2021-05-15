@@ -21,6 +21,7 @@
   export let speed: number = 1;
   export let showController: boolean = true;
   export let tags: Record<string, string> = {};
+  export let onMakeNotes: CallableFunction;
 
   export const getMirror = () => mirror;
 
@@ -69,6 +70,12 @@
   export const toggleFullscreen = () => {
     if (player) {
       isFullscreen() ? exitFullscreen() : openFullscreen(player);
+    }
+  };
+
+  export const makeNotes = () => {
+    if (onMakeNotes) {
+      onMakeNotes();
     }
   };
 
@@ -216,6 +223,7 @@
       {speedOption}
       {skipInactive}
       {tags}
+      on:makenotes={() => makeNotes()} 
       on:fullscreen={() => toggleFullscreen()} />
   {/if}
 </div>

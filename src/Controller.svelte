@@ -274,6 +274,9 @@
           {s}x
         </button>
       {/each}
+      <button class="btn btn-md btn-primary" title="Make Notes" on:click={() => dispatch('makenotes')}>
+        <i class="fa fa-pen"></i>
+      </button>
       <button class="btn btn-md btn-primary btn-fullscreen" on:click={() => dispatch('fullscreen')}>
         <i class="fa fa-expand"></i>
       </button>

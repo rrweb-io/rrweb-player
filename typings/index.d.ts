@@ -12,6 +12,7 @@ export type RRwebPlayerOptions = {
     speed?: number;
     speedOption?: number[];
     showController?: boolean;
+    onMakeNotes?: () => void;
     tags?: Record<string, string>;
   } & Partial<playerConfig>;
 };
