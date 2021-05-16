@@ -19,6 +19,7 @@
 
   export let replayer: Replayer;
   export let showController: boolean;
+  export let showNotesButton: boolean;
   export let autoPlay: boolean;
   export let skipInactive: boolean;
   export let speedOption: number[];
@@ -274,9 +275,11 @@
           {s}x
         </button>
       {/each}
-      <button class="btn btn-md btn-primary" title="Make Notes" on:click={() => dispatch('makenotes')}>
-        <i class="fa fa-pen"></i>
-      </button>
+      {#if showNotesButton}
+        <button class="btn btn-md btn-primary" title="Make Notes" on:click={() => dispatch('makenotes')}>
+          <i class="fa fa-comment-alt"></i>
+        </button>
+      {/if}
       <button class="btn btn-md btn-primary btn-fullscreen" on:click={() => dispatch('fullscreen')}>
         <i class="fa fa-expand"></i>
       </button>

@@ -20,6 +20,7 @@
   export let speedOption: number[] = [1, 2, 4, 8];
   export let speed: number = 1;
   export let showController: boolean = true;
+  export let showNotesButton: boolean = false;
   export let tags: Record<string, string> = {};
   export let onMakeNotes: CallableFunction;
 
@@ -219,6 +220,7 @@
       bind:this={controller}
       {replayer}
       {showController}
+      {showNotesButton}
       {autoPlay}
       {speedOption}
       {skipInactive}
