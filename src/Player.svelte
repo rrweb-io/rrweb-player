@@ -21,6 +21,7 @@
   export let speed: number = 1;
   export let showController: boolean = true;
   export let showNotesButton: boolean = false;
+  export let isLivePlayer: boolean = false;
   export let tags: Record<string, string> = {};
   export let onMakeNotes: CallableFunction;
 
@@ -213,6 +214,9 @@
   }
 </style>
 
+{#if isLivePlayer}
+  <div class="live-player">Live</div>
+{/if}
 <div class="rr-player" bind:this={player} style={playerStyle}>
   <div class="rr-player__frame" bind:this={frame} {style} />
   {#if replayer}

@@ -13,6 +13,7 @@ export type RRwebPlayerOptions = {
     speedOption?: number[];
     showController?: boolean;
     showNotesButton?: boolean;
+    isLivePlayer?: boolean;
     onMakeNotes?: () => void;
     tags?: Record<string, string>;
   } & Partial<playerConfig>;
