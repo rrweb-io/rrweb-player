@@ -213,6 +213,10 @@
       finished = true;
     });
 
+    replayer.on('add-event-end', () => {
+      meta = replayer.getMetaData()
+    })
+
     if (autoPlay) {
       replayer.play();
     }
