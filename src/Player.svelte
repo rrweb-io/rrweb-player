@@ -1,7 +1,7 @@
 <script lang="ts">
   import { onMount, onDestroy } from 'svelte';
-  import { Replayer, unpack, mirror } from 'rrweb';
-  import type { eventWithTime, playerConfig } from 'rrweb/typings/types';
+  import { Replayer, unpack } from 'rrweb';
+  import type { eventWithTime } from 'rrweb/typings/types';
   import {
     inlineCss,
     openFullscreen,
@@ -25,12 +25,13 @@
   export let tags: Record<string, string> = {};
   export let onMakeNotes: CallableFunction;
 
-  export const getMirror = () => mirror;
+  let replayer: Replayer;
+  
+  export const getMirror = () => replayer.getMirror();
 
   const controllerHeight = 160;
   let player: HTMLElement;
   let frame: HTMLElement;
-  let replayer: Replayer;
   let fullscreenListener: undefined | (() => void);
   let _width: number = width;
   let _height: number = height;
@@ -118,8 +119,8 @@
   export const pause = () => {
     controller.pause();
   };
-  export const goto = (timeOffset: number) => {
-    controller.goto(timeOffset);
+  export const goto = (timeOffset: number, play?: boolean) => {
+    controller.goto(timeOffset, play);
   };
 
   onMount(() => {
